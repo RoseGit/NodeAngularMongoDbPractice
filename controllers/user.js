@@ -5,6 +5,7 @@ var bcrypt = require('bcrypt-nodejs')
 //Cargamos el modelo de usuario
 var User = require('../models/user');
 
+var jwt = require('../services/jwt');
 function pruebas(req, res){
     res.status(200).send({
         message:'Probando una accion del controlador de usuarios del aPI rest con node y mongo'
@@ -50,9 +51,42 @@ function saveUser(req, res){
     }
 }
 
+function loginUser(req, res){
+    var params = req.body;
+    var email = params.email;
+    var password = params.password;
+    User.findOne({email: email.toLowerCase()})
+    .then((userStored)=>{
+        // Si se guarda correctamente
+        if(!userStored){
+            return res.status(404).send({message: 'No se ha registraEl usuario no existe'});
+        } else {
+            bcrypt.compare(password, userStored.password, function(err, check){
+                if(check){
+                    //devolver los datos del usuario logeado
+                    if(params.getHash){
+                        //generar bearer token
+                        res.status(200).send({
+                            token: jwt.createToken(userStored)
+                        });
+                    }else{
+                        res.status(200).send({user: userStored});
+                    }
+                }else{
+                    return res.status(404).send({message: 'No se ha podido logearse'});
+                }
+            });
+        }
+    })
+    .catch((err)=> {
+        console.log(err); // Log the error for debugging
+        return res.status(500).send({message: 'Error en la peticion '});
+    });
+}
 
 
 module.exports = {
     pruebas,
-    saveUser
+    saveUser,
+    loginUser
 };
