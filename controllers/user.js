@@ -109,10 +109,46 @@ function updateUser(req, res){
     });
 }
 
+//subir ficheros avatar
+function uploadImage(req, res){
+    var userId = req.params.id; 
+    var file_name = 'No subido...';
+
+    if(req.files){
+        var file_path = req.files.image.path;
+        var file_split = file_path.split('\\');
+        var file_name = file_split[2];
+
+        var ext_split = file_name.split('\.');
+        var file_ext = ext_split[1];
+console.log(file_ext);
+        if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif' || file_ext == 'JPG'){
+            User.findByIdAndUpdate(userId, {image: file_name})
+            .then((userStored)=>{
+                if(!userStored){
+                    return res.status(404).send({message: 'no se actualizo el usuario porque no existe'});
+                }else{
+                    return res.status(200).send({user:userStored});
+                }
+            })
+            .catch((err)=> {
+                console.log(err); // Log the error for debugging
+                return res.status(500).send({message: 'Error en la peticion de update'});
+            });
+        }else{
+            return res.status(200).send({message: 'extencion del archivo no valida'});    
+        }
+        console.log(file_path);
+    }else{
+        return res.status(200).send({message: 'No ha subido ninguna imagen'});
+    }
+}
+
 module.exports = {
     pruebas,
     saveUser,
     loginUser,
     pruebasJwt,
-    updateUser
+    updateUser,
+    uploadImage
 };
