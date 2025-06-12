@@ -91,10 +91,28 @@ function loginUser(req, res){
     });
 }
 
+function updateUser(req, res){
+    var userId = req.params.id;
+    var update = req.body;
+
+    User.findByIdAndUpdate(userId, update)
+    .then((userStored) => {
+        if(!userStored){
+            return res.status(404).send({message: 'no se actualizo el usuario porque no existe'});
+        }else{
+            return res.status(200).send({user:userStored});
+        }
+    })
+    .catch((err)=>{
+        console.log(err); // Log the error for debugging
+        return res.status(500).send({message: 'Error en la peticion de update'});
+    });
+}
 
 module.exports = {
     pruebas,
     saveUser,
     loginUser,
-    pruebasJwt
+    pruebasJwt,
+    updateUser
 };
