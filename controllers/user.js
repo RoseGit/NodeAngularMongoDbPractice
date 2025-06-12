@@ -6,9 +6,16 @@ var bcrypt = require('bcrypt-nodejs')
 var User = require('../models/user');
 
 var jwt = require('../services/jwt');
+
 function pruebas(req, res){
     res.status(200).send({
         message:'Probando una accion del controlador de usuarios del aPI rest con node y mongo'
+    });
+}
+
+function pruebasJwt(req, res){
+    res.status(200).send({
+        message:'Probando una accion del controlador de usuarios del aPI rest con node y mongo y validando JWT'
     });
 }
 
@@ -88,5 +95,6 @@ function loginUser(req, res){
 module.exports = {
     pruebas,
     saveUser,
-    loginUser
+    loginUser,
+    pruebasJwt
 };
