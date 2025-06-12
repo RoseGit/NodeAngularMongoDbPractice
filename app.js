@@ -5,15 +5,14 @@ var bodyParser = require('body-parser');
 
 var app = express();
 //cargar rutas
+var user_routes = require('./routes/user');
 
 app.use(bodyParser.urlencoded({encoded:false}));
 app.use(bodyParser.json());
 
 //configurar cabeceras http
 
-//Configurar rutas base 
-app.get('/pruebas', function(req, res){
-res.status(200).send({message:'bienvenido al curso de rose'});
-});
+//configurar ruta base 
+app.use('/api', user_routes);
 
 module.exports = app;
