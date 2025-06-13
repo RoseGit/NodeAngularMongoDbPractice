@@ -7,6 +7,9 @@ var User = require('../models/user');
 
 var jwt = require('../services/jwt');
 
+var fs = require('fs');
+var path = require('path');
+
 function pruebas(req, res){
     res.status(200).send({
         message:'Probando una accion del controlador de usuarios del aPI rest con node y mongo'
@@ -121,7 +124,7 @@ function uploadImage(req, res){
 
         var ext_split = file_name.split('\.');
         var file_ext = ext_split[1];
-console.log(file_ext);
+        console.log(file_ext);
         if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif' || file_ext == 'JPG'){
             User.findByIdAndUpdate(userId, {image: file_name})
             .then((userStored)=>{
@@ -144,11 +147,25 @@ console.log(file_ext);
     }
 }
 
+
+function getImagefile(req, res){
+    var image_file = req.params.imageFile;
+    var path_file = './uploads/users/'+image_file;
+    fs.exists(path_file, function(exists){
+        if(exists){
+            res.sendFile(path.resolve(path_file));
+        }else{
+            return res.status(200).send({message: 'No existe la imagen'});
+        }
+    })
+}
+
 module.exports = {
     pruebas,
     saveUser,
     loginUser,
     pruebasJwt,
     updateUser,
-    uploadImage
+    uploadImage,
+    getImagefile
 };

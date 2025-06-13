@@ -21,5 +21,6 @@ api.post('/login', UserController.loginUser);
 api.get('/probando-controlador-jwt', md_auth.ensureAuth, UserController.pruebasJwt);
 api.put('/update-user/:id', md_auth.ensureAuth, UserController.updateUser);//id obligatorio
 api.post('/upload-image-user/:id', [md_auth.ensureAuth, md_upload], UserController.uploadImage);
+api.get('/get-image-user/:imageFile', UserController.getImagefile);
 
 module.exports = api;
