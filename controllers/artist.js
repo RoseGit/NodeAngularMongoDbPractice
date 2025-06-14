@@ -8,7 +8,22 @@ var Album = require('../models/album');
 var Song = require('../models/song');
 
 function getArtist(req, res){
-    res.status(200).send({message:'Method get artist'});
+    var artistId = req.params.id;
+    Artist.findById(artistId)
+    .then((artistStored) => {
+        // Si se guarda correctamente
+        if(!artistStored){
+            return res.status(404).send({message: 'El artista no existe'});
+        } else {
+            return res.status(200).send({artistStored});
+        }
+    })
+    .catch((err)=> {
+        // Si hay un error al guardar
+        console.log(err); // Log the error for debugging
+        return res.status(500).send({message: 'Error en la peticion'});
+    });
+
 }
 
 
@@ -32,6 +47,8 @@ function saveArtist(req, res){
         return res.status(500).send({message: 'Error al guardar el artista'});
     });
 }
+
+
 
 module.exports = {
     getArtist,
