@@ -32,6 +32,7 @@ function getArtist(req, res){
 function saveArtist(req, res){
     var artist = new Artist();
     var params = req.body;
+    artist.name = params.name;
     artist.description = params.description;
     artist.image = 'null';
     artist.save()
@@ -76,8 +77,26 @@ function getArtists(req, res){
     });
 }
 
+
+function updateArtist(req, res){
+    var artistId = req.params.id;
+    var update = req.body;
+    Artist.findByIdAndUpdate(artistId, update)
+    .then((artistStored) => {
+        if(!artistStored){
+            return res.status(404).send({message: 'no se actualizo el artista porque no existe'});
+        }else{
+            return res.status(200).send({artist:artistStored});
+        }
+    })
+    .catch((err)=>{
+        console.log(err); // Log the error for debugging
+        return res.status(500).send({message: 'Error en la peticion de update'});
+    }); ;
+}
 module.exports = {
     getArtist,
     saveArtist,
-    getArtists
+    getArtists,
+    updateArtist
 }
