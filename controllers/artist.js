@@ -7,6 +7,8 @@ var Artist = require('../models/artist');
 var Album = require('../models/album');
 var Song = require('../models/song');
 
+var mongoosePaginate = require('mongoose-pagination');
+
 function getArtist(req, res){
     var artistId = req.params.id;
     Artist.findById(artistId)
@@ -15,7 +17,7 @@ function getArtist(req, res){
         if(!artistStored){
             return res.status(404).send({message: 'El artista no existe'});
         } else {
-            return res.status(200).send({artistStored});
+            return res.status(200).send({artist:artistStored});
         }
     })
     .catch((err)=> {
@@ -48,9 +50,34 @@ function saveArtist(req, res){
     });
 }
 
+function getArtists(req, res){
+    if(req.params.page){
+        var page = req.params.page;
+    }else{
+        var page = 1;
+    }
+    
+    var itemsPerPage = 3;
 
+    Artist.find().sort('name').paginate(page, itemsPerPage)
+    .then((artists)=>{
+        if(!artists){
+            return res.status(404).send({message: 'No hay artistas'});
+        } else {
+            return res.status(200).send({
+                total_items: artists.totalDocs,//FIXME: Actualizar la version de moongose -pagination porque "mongoose": "^8.15.1", no lo soporta y totalDocs es undefined 
+                artists:artists
+            });
+        }
+    })
+    .catch((err)=>{
+        console.log(err); // Log the error for debugging
+        return res.status(500).send({message: 'Error al guardar el artista'});     
+    });
+}
 
 module.exports = {
     getArtist,
-    saveArtist
+    saveArtist,
+    getArtists
 }
