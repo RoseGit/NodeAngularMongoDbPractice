@@ -131,7 +131,7 @@ function uploadImage(req, res){
                 if(!userStored){
                     return res.status(404).send({message: 'no se actualizo el usuario porque no existe'});
                 }else{
-                    return res.status(200).send({user:userStored});
+                    return res.status(200).send({image: file_name, user:userStored});
                 }
             })
             .catch((err)=> {

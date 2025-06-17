@@ -140,7 +140,7 @@ function uploadImage(req, res) {
                     if (!albumStored) {
                         return res.status(404).send({ message: 'no se actualizo el album porque no existe' });
                     } else {
-                        return res.status(200).send({ album: albumStored });
+                        return res.status(200).send({ image: file_name, album: albumStored });
                     }
                 })
                 .catch((err) => {

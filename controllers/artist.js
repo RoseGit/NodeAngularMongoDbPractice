@@ -148,7 +148,7 @@ function uploadImage(req, res) {
                     if (!artistStored) {
                         return res.status(404).send({ message: 'no se actualizo el artista porque no existe' });
                     } else {
-                        return res.status(200).send({ artist: artistStored });
+                        return res.status(200).send({ image: file_name, artist: artistStored });
                     }
                 })
                 .catch((err) => {
