@@ -94,9 +94,46 @@ function updateArtist(req, res){
         return res.status(500).send({message: 'Error en la peticion de update'});
     }); ;
 }
+
+function deleteArtist(req, res){
+    var artistId = req.params.id;
+    Artist.findByIdAndDelete(artistId)
+        .then(artistRemoved => {
+            if (!artistRemoved) {
+                return res.status(404).send({ message: 'El artista no ha podido ser eliminado' });
+            }
+
+            // PASO 1: Eliminar todos los álbumes asociados a este artista
+            return Album.deleteMany({ artist: artistRemoved._id }) 
+                .then(() => {
+                    
+                    // Para mayor claridad y robustez, hagamos la eliminación en cadena más explícita:
+                    return Album.find({ artist: artistRemoved._id }) // Primero, encuentra los álbumes
+                        .then(albums => {
+                            const albumIds = albums.map(album => album._id);
+                            
+                            // Ahora elimina los álbumes
+                            return Album.deleteMany({ artist: artistRemoved._id })
+                                .then(() => {
+                                    // Finalmente, elimina las canciones cuyos álbumes fueron eliminados
+                                    return Song.deleteMany({ album: { $in: albumIds } }); // <-- USAR deleteMany() aquí
+                                });
+                        });
+                });
+        })
+        .then(() => { // Este .then() se encadena después de que todas las eliminaciones anteriores hayan terminado
+            return res.status(200).send({ message: 'Artista y sus álbumes/canciones relacionados eliminados correctamente.' });
+        })
+        .catch(err => {
+            console.error('Error al borrar el artista o sus datos relacionados:', err);
+            return res.status(500).send({ message: 'Error al borrar el artista o sus datos relacionados.' });
+        });
+}
+
 module.exports = {
     getArtist,
     saveArtist,
     getArtists,
-    updateArtist
+    updateArtist,
+    deleteArtist
 }
