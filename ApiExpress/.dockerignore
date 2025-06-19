@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+.env # Si usas variables de entorno sensibles
+dist/ # Si tienes un directorio de compilación
+tmp/
+*.log
+Dockerfile
+.dockerignore
