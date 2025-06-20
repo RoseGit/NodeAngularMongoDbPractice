@@ -13,6 +13,7 @@ export class AppComponent implements OnInit{
   public user: User;
   public identity; 
   public token; 
+  public errorMessage;
 
   constructor(private _userService:UserService){
     this.user = new User('','','','','','ROLE_USER','');
@@ -20,12 +21,25 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(){
-    var texto = this._userService.signup();
-    console.log(texto);
+    console.log('OnInit Component');
   }
 
   public onSubmit(){
     console.log(this.user);
+
+    this._userService.signup(this.user).subscribe(
+      response => {
+        console.log(response);
+      }, 
+      error=>{
+        var errorMessage = <any>error;
+        if(errorMessage!=null){
+          var body = JSON.parse(error._body);
+          this.errorMessage = body.message;
+          console.log(error);
+        }
+      }
+    );
 
   }
 
