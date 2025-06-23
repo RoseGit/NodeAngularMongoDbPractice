@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     console.log('OnInit Component');
     this.identity = this._userService.getIdentity();
-    this.token =this._userService.getToken();
+    this.token = this._userService.getToken();
   }
 
   public onSubmit() {
@@ -81,5 +81,14 @@ export class AppComponent implements OnInit {
 
   }
 
+  logout(){
+    localStorage.removeItem('identity');
+    localStorage.removeItem('token');
+    localStorage.clear();
+
+    //mostrar los formularios 
+    this.identity = null;
+    this.token = null;
+  }
 
 }

@@ -3,6 +3,10 @@
   <h1>
     Welcome to {{ title }}!
   </h1>
+  <span>
+    {{identity.name}} {{identity.surname}}
+  </span>
+  <span (click)="logout()" class="btn btn-warning">Cerrar sesion </span>
 </div>
 
 <div class="clearfix"></div>
