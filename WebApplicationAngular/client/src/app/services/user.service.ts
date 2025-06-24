@@ -49,4 +49,14 @@ export class UserService{
 
         return this.token;
     }
+
+    register(user_to_register){
+        //json en formato de string
+        let params = JSON.stringify(user_to_register);
+        let headers = new Headers({'Content-Type':'application/json'});
+
+        return  this.
+            _http.post(this.url+'/register', params, {headers: headers})
+            .map(res => res.json());//recibimos la respuesta del servicio
+    }
 }
