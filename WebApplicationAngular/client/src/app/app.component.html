@@ -3,16 +3,39 @@
   <h1>
     Welcome to {{ title }}!
   </h1>
-  <span>
-    {{identity.name}} {{identity.surname}}
-  </span>
-  <span (click)="logout()" class="btn btn-warning">Cerrar sesion </span>
+  <nav id="navigation">
+    <a href="#">
+      <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+      Buscar
+    </a>
+    <a href="#">
+      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+      Artistas
+    </a>
+    <a href="#">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+      Albums
+    </a>
+  </nav>
+  <nav id="user_logged">
+    <span>
+      {{identity.name}} 
+    </span>
+    <span (click)="logout()" class="btn btn-warning">Cerrar sesion </span>
+    <span>
+      <a href="#">
+        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        Mis datos
+      </a>
+    </span>
+  </nav>
 </div>
 
 <div class="clearfix"></div>
 
 <div *ngIf="identity" class="navigation col-lg-11">
   <p>Estas logeado en la aplicacion</p>
+  <user-edit></user-edit>
 </div>
 
 <div *ngIf="!identity" class="col-lg-12">
@@ -23,17 +46,18 @@
         <strong>Error</strong> {{errorMessage}}
       </div>
     </div>
-     <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-10">
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-10">
       <p>
         <label>Correo electronico:</label>
         <input #email="ngModel" name="email" [(ngModel)]="user.email" type="email" class="form-control" required>
         <span *ngIf="!email.valid && email.touched">
-          Email es obligatorio 
+          Email es obligatorio
         </span>
       </p>
       <p>
         <label>Password:</label>
-        <input #password="ngModel" name="password" [(ngModel)]="user.password" type="password" class="form-control" required>
+        <input #password="ngModel" name="password" [(ngModel)]="user.password" type="password" class="form-control"
+          required>
       </p>
       <input type="submit" value="Entrar" class="btn btn-primary" />
     </form>
@@ -50,28 +74,31 @@
         <label>Nombre:</label>
         <input #name="ngModel" name="name" [(ngModel)]="user_register.name" type="text" class="form-control" required>
         <span *ngIf="!name.valid && name.touched">
-          Name es obligatorio 
+          Name es obligatorio
         </span>
       </p>
       <p>
         <label>Apellidos:</label>
-        <input #surname="ngModel" name="surname" [(ngModel)]="user_register.surname" type="text" class="form-control" required>
+        <input #surname="ngModel" name="surname" [(ngModel)]="user_register.surname" type="text" class="form-control"
+          required>
         <span *ngIf="!surname.valid && surname.touched">
-          Surname es obligatorio 
+          Surname es obligatorio
         </span>
       </p>
       <p>
         <label>Correo electronico:</label>
-        <input #email="ngModel" name="email" [(ngModel)]="user_register.email" type="email" class="form-control" required>
+        <input #email="ngModel" name="email" [(ngModel)]="user_register.email" type="email" class="form-control"
+          required>
         <span *ngIf="!email.valid && email.touched">
-          Email es obligatorio 
+          Email es obligatorio
         </span>
       </p>
       <p>
         <label>Password:</label>
-        <input #password="ngModel" name="password" [(ngModel)]="user_register.password" type="password" class="form-control" required>
+        <input #password="ngModel" name="password" [(ngModel)]="user_register.password" type="password"
+          class="form-control" required>
         <span *ngIf="!password.valid && password.touched">
-          Password es obligatorio 
+          Password es obligatorio
         </span>
       </p>
 
