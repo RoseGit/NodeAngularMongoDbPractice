@@ -7,3 +7,6 @@ const appRoutes: Routes = [
     {path:'mis-datos', component: UserEditComponent},
     {path:'**', component: UserEditComponent},
 ];
+
+export const appRoutingProviders:any[]=[];
+export const routing:ModuleWithProviders = RouterModule.forRoot(appRoutes);
